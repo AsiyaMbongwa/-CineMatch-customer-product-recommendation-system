@@ -160,7 +160,7 @@ def main():
     """Main Streamlit application"""
     
     # Header
-    st.markdown('<h1 class="main-header">🎬 CineMatch</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-header">CineMatch</h1>', unsafe_allow_html=True)
     st.markdown('<h2 style="text-align: center; color: #666;">Movie Recommendation System</h2>', unsafe_allow_html=True)
     
     # Load data
@@ -169,7 +169,7 @@ def main():
     
     if ratings_df is None:
         st.error("""
-        ❌ **Dataset not found!**
+        **Dataset not found!**
         
         Please download the MovieLens 100k dataset and extract it to the `data/` folder.
         
@@ -186,22 +186,22 @@ def main():
         return
     
     # Sidebar
-    st.sidebar.title("🎛️ Navigation")
+    st.sidebar.title("Navigation")
     page = st.sidebar.selectbox(
         "Choose a page:",
-        ["🏠 Home", "🎯 Get Recommendations", "📊 Data Analysis", "🔍 Movie Explorer", "⚙️ System Settings"]
+        ["Home", "Get Recommendations", "Data Analysis", "Movie Explorer", "System Settings"]
     )
     
     # Main content based on selected page
-    if page == "🏠 Home":
+    if page == "Home":
         show_home_page(ratings_df, movies_df, users_df)
-    elif page == "🎯 Get Recommendations":
+    elif page == "Get Recommendations":
         show_recommendations_page(cf_system, cb_system, hybrid_system, movies_df)
-    elif page == "📊 Data Analysis":
+    elif page == "Data Analysis":
         show_analysis_page(ratings_df, movies_df, users_df)
-    elif page == "🔍 Movie Explorer":
+    elif page == "Movie Explorer":
         show_movie_explorer_page(cb_system, movies_df)
-    elif page == "⚙️ System Settings":
+    elif page == "System Settings":
         show_settings_page(hybrid_system)
 
 def show_home_page(ratings_df, movies_df, users_df):
@@ -219,26 +219,26 @@ def show_home_page(ratings_df, movies_df, users_df):
             poster = get_movie_poster(str(row['title']), int(row['year']) if pd.notna(row.get('year')) else None)
             st.image(poster, caption=row['title'], width=200)
     
-    st.markdown('<div class="sub-header">📈 Dataset Overview</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-header">Dataset Overview</div>', unsafe_allow_html=True)
     
     # Key metrics
     col1, col2, col3, col4 = st.columns(4)
     
     with col1:
-        st.metric("👥 Total Users", f"{len(users_df):,}")
+        st.metric("Total Users", f"{len(users_df):,}")
     
     with col2:
-        st.metric("🎬 Total Movies", f"{len(movies_df):,}")
+        st.metric("Total Movies", f"{len(movies_df):,}")
     
     with col3:
-        st.metric("⭐ Total Ratings", f"{len(ratings_df):,}")
+        st.metric("Total Ratings", f"{len(ratings_df):,}")
     
     with col4:
         avg_rating = ratings_df['rating'].mean()
-        st.metric("📊 Average Rating", f"{avg_rating:.2f}")
+        st.metric("Average Rating", f"{avg_rating:.2f}")
     
     # Rating distribution
-    st.markdown('<div class="sub-header">📊 Rating Distribution</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-header">Rating Distribution</div>', unsafe_allow_html=True)
     
     rating_counts = ratings_df['rating'].value_counts().sort_index()
     fig = px.bar(
@@ -253,7 +253,7 @@ def show_home_page(ratings_df, movies_df, users_df):
     st.plotly_chart(fig, use_container_width=True)
     
     # Popular movies
-    st.markdown('<div class="sub-header">🏆 Most Popular Movies</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-header">Most Popular Movies</div>', unsafe_allow_html=True)
     
     popular_movies = ratings_df.groupby('item_id').size().reset_index(name='rating_count')
     popular_movies = popular_movies.merge(movies_df[['movie_id', 'title']], left_on='item_id', right_on='movie_id')
@@ -269,14 +269,14 @@ def show_home_page(ratings_df, movies_df, users_df):
             """, unsafe_allow_html=True)
     
     # System information
-    st.markdown('<div class="sub-header">🤖 Recommendation Systems</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-header">Recommendation Systems</div>', unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns(3)
     
     with col1:
         st.markdown("""
         <div class="metric-card">
-            <h4>🤝 Collaborative Filtering</h4>
+            <h4>Collaborative Filtering</h4>
             <p>Recommends movies based on similar users' preferences</p>
         </div>
         """, unsafe_allow_html=True)
@@ -284,7 +284,7 @@ def show_home_page(ratings_df, movies_df, users_df):
     with col2:
         st.markdown("""
         <div class="metric-card">
-            <h4>🎭 Content-Based Filtering</h4>
+            <h4>Content-Based Filtering</h4>
             <p>Recommends movies based on genre and content similarity</p>
         </div>
         """, unsafe_allow_html=True)
@@ -292,7 +292,7 @@ def show_home_page(ratings_df, movies_df, users_df):
     with col3:
         st.markdown("""
         <div class="metric-card">
-            <h4>🔄 Hybrid System</h4>
+            <h4>Hybrid System</h4>
             <p>Combines both approaches for improved accuracy</p>
         </div>
         """, unsafe_allow_html=True)
@@ -300,7 +300,7 @@ def show_home_page(ratings_df, movies_df, users_df):
 def show_recommendations_page(cf_system, cb_system, hybrid_system, movies_df):
     """Display the recommendations page"""
     
-    st.markdown('<div class="sub-header">🎯 Get Movie Recommendations</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-header">Get Movie Recommendations</div>', unsafe_allow_html=True)
     
     # User selection
     col1, col2 = st.columns([2, 1])
@@ -327,13 +327,13 @@ def show_recommendations_page(cf_system, cb_system, hybrid_system, movies_df):
         
         for _, rating in top_rated.iterrows():
             movie_title = cf_system.get_movie_title(rating['item_id'])
-            st.write(f"⭐ {movie_title} - {rating['rating']} stars")
+            st.write(f"{movie_title} - {rating['rating']} stars")
     
     # Recommendation methods
-    st.markdown('<div class="sub-header">🎬 Recommendations</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-header">Recommendations</div>', unsafe_allow_html=True)
     
     # Tabs for different recommendation methods
-    tab1, tab2, tab3, tab4 = st.tabs(["🤝 Collaborative", "🎭 Content-Based", "🔄 Hybrid", "📊 Compare All"])
+    tab1, tab2, tab3, tab4 = st.tabs(["Collaborative", "Content-Based", "Hybrid", "Compare All"])
     
     with tab1:
         st.markdown("**User-Based Collaborative Filtering**")
@@ -408,10 +408,10 @@ def show_recommendations_page(cf_system, cb_system, hybrid_system, movies_df):
 def show_analysis_page(ratings_df, movies_df, users_df):
     """Display the data analysis page"""
     
-    st.markdown('<div class="sub-header">📊 Data Analysis</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-header">Data Analysis</div>', unsafe_allow_html=True)
     
     # User analysis
-    st.markdown("**👥 User Analysis**")
+    st.markdown("**User Analysis**")
     
     col1, col2 = st.columns(2)
     
@@ -438,7 +438,7 @@ def show_analysis_page(ratings_df, movies_df, users_df):
         st.plotly_chart(fig2, use_container_width=True)
     
     # Movie analysis
-    st.markdown("**🎬 Movie Analysis**")
+    st.markdown("**Movie Analysis**")
     
     col1, col2 = st.columns(2)
     
@@ -465,7 +465,7 @@ def show_analysis_page(ratings_df, movies_df, users_df):
         st.plotly_chart(fig4, use_container_width=True)
     
     # Genre analysis
-    st.markdown("**🎭 Genre Analysis**")
+    st.markdown("**Genre Analysis**")
     
     # Get genre columns
     genre_columns = ['action', 'adventure', 'animation', 'children', 'comedy', 'crime',
@@ -494,10 +494,10 @@ def show_analysis_page(ratings_df, movies_df, users_df):
 def show_movie_explorer_page(cb_system, movies_df):
     """Display the movie explorer page"""
     
-    st.markdown('<div class="sub-header">🔍 Movie Explorer</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-header">Movie Explorer</div>', unsafe_allow_html=True)
     
     # Movie search
-    movie_search = st.text_input("🔍 Search for a movie:", placeholder="Enter movie title...")
+    movie_search = st.text_input("Search for a movie:", placeholder="Enter movie title...")
     
     if movie_search:
         # Filter movies based on search
@@ -527,7 +527,7 @@ def show_movie_explorer_page(cb_system, movies_df):
         col1, col2 = st.columns([2, 1])
         
         with col1:
-            st.markdown(f"**🎬 {movie_info['title']}**")
+            st.markdown(f"**{movie_info['title']}**")
             
             # Get genres
             genre_columns = ['action', 'adventure', 'animation', 'children', 'comedy', 'crime',
@@ -544,7 +544,7 @@ def show_movie_explorer_page(cb_system, movies_df):
         
         with col2:
             # Similar movies
-            st.markdown("**🎯 Similar Movies:**")
+            st.markdown("**Similar Movies:**")
             
             try:
                 similar_movies = cb_system.get_similar_movies(selected_movie_id, 5)
@@ -560,18 +560,17 @@ def show_movie_explorer_page(cb_system, movies_df):
 def show_settings_page(hybrid_system):
     """Display the system settings page"""
     
-    st.markdown('<div class="sub-header">⚙️ System Settings</div>', unsafe_allow_html=True)
-     # OMDb API Key input
-    st.markdown("**🎬 OMDb API Key**")
+    st.markdown('<div class="sub-header">System Settings</div>', unsafe_allow_html=True)
+    
+    # OMDb API Key input
+    st.markdown("**OMDb API Key**")
     api_key_input = st.text_input("Enter your OMDb API Key:", type="password")
     if api_key_input:
         st.session_state["OMDB_API_KEY"] = api_key_input
-        st.success("✅ OMDb API Key saved for this session.")
-    
-   
+        st.success("OMDb API Key saved for this session.")
     
     # Hybrid system weights
-    st.markdown("**🔄 Hybrid System Configuration**")
+    st.markdown("**Hybrid System Configuration**")
     
     col1, col2 = st.columns(2)
     
@@ -596,12 +595,12 @@ def show_settings_page(hybrid_system):
     if st.button("Update Weights"):
         if abs(cf_weight + cb_weight - 1.0) < 0.01:
             hybrid_system.set_weights(cf_weight, cb_weight)
-            st.success("✅ Weights updated successfully!")
+            st.success("Weights updated successfully!")
         else:
-            st.error("❌ Weights must sum to 1.0")
+            st.error("Weights must sum to 1.0")
     
     # System information
-    st.markdown("**📊 System Information**")
+    st.markdown("**System Information**")
     
     try:
         system_info = hybrid_system.get_system_info()
@@ -643,4 +642,3 @@ def display_recommendations(recommendations, system):
 
 if __name__ == "__main__":
     main()
-
